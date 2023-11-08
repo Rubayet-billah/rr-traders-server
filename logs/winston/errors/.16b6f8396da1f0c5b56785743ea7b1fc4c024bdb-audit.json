@@ -1,0 +1,15 @@
+{
+    "keep": {
+        "days": true,
+        "amount": 14
+    },
+    "auditLog": "F:\\Projects\\my-projects\\rr-traders-server\\logs\\winston\\errors\\.16b6f8396da1f0c5b56785743ea7b1fc4c024bdb-audit.json",
+    "files": [
+        {
+            "date": 1699472492659,
+            "name": "F:\\Projects\\my-projects\\rr-traders-server\\logs\\winston\\errors\\phu-2023-09-11-01-error.log",
+            "hash": "a5622e87ff6cef81efef5a6ece33751b369623574476d59c5bf317bdabca2f55"
+        }
+    ],
+    "hashType": "sha256"
+}
