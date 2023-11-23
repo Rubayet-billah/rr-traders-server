@@ -1,4 +1,6 @@
 import { PrismaClient } from '@prisma/client';
+import bcrypt from 'bcrypt';
+import config from '../config';
 
 const prisma = new PrismaClient();
 
@@ -26,10 +28,32 @@ export const generateUserId = async () => {
   return newUserId;
 };
 
-// Example usage
-const createNewUser = async () => {
-  const newUserId = await generateUserId();
-  console.log(newUserId);
+// Function to hash a plain password
+export const hashUserPassword = async (
+  plainPassword: string
+): Promise<string | null> => {
+  try {
+    const hashedPassword = await bcrypt.hash(
+      plainPassword,
+      Number(config.bycrypt_salt_rounds)
+    );
+    return hashedPassword;
+  } catch (err) {
+    console.error('Error while hashing password:', err);
+    return null;
+  }
 };
 
-createNewUser(); // Call this function to generate a new user ID asynchronously
+// Function to match plain text password with hashed password
+export const matchUserPassword = async (
+  plainPassword: string,
+  hashedPassword: string
+): Promise<boolean> => {
+  try {
+    const match = await bcrypt.compare(plainPassword, hashedPassword);
+    return match;
+  } catch (err) {
+    console.error('Error while comparing passwords:', err);
+    return false;
+  }
+};

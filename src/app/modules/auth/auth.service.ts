@@ -1,7 +1,7 @@
 // auth.service.ts
 
 import { PrismaClient, User } from '@prisma/client';
-import { generateUserId } from '../../../utils/utilsFunction';
+import { generateUserId, hashUserPassword } from '../../../utils/utilsFunction';
 
 const prisma = new PrismaClient();
 
@@ -9,6 +9,9 @@ const registerUser = async (userData: User) => {
   try {
     const userId = await generateUserId();
     userData.userId = userId;
+
+    userData.password = (await hashUserPassword(userData.password)) as string;
+
     const result = await prisma.user.create({
       data: userData,
     });

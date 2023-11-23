@@ -6,19 +6,9 @@
     "auditLog": "F:\\Projects\\my-projects\\rr-traders-server\\logs\\winston\\errors\\.16b6f8396da1f0c5b56785743ea7b1fc4c024bdb-audit.json",
     "files": [
         {
-            "date": 1700071497066,
-            "name": "F:\\Projects\\my-projects\\rr-traders-server\\logs\\winston\\errors\\phu-2023-16-11-00-error.log",
-            "hash": "32a5befd6858fa60ea9e6bcd9d83a3f8ec29a0e98ee4aeb030279a3ba53f0c96"
-        },
-        {
-            "date": 1700075916966,
-            "name": "F:\\Projects\\my-projects\\rr-traders-server\\logs\\winston\\errors\\phu-2023-16-11-01-error.log",
-            "hash": "30540daeca0590a378f66cc22c7cdfdf38aa99e755ec37d6a0a93a830ceb8632"
-        },
-        {
-            "date": 1700767500506,
+            "date": 1700768576667,
             "name": "F:\\Projects\\my-projects\\rr-traders-server\\logs\\winston\\errors\\phu-2023-24-11-01-error.log",
-            "hash": "128c17d0b1dd22a4b3fe75183138771cb6481d6997f674bc8d66db400528a254"
+            "hash": "bc8f02e63435b6be5f8270ef709f2f5aeb94ed70e4f3fb567f63d44fc5340c5d"
         }
     ],
     "hashType": "sha256"
