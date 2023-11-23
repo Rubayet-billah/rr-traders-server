@@ -9,6 +9,16 @@
             "date": 1699472492659,
             "name": "F:\\Projects\\my-projects\\rr-traders-server\\logs\\winston\\errors\\phu-2023-09-11-01-error.log",
             "hash": "a5622e87ff6cef81efef5a6ece33751b369623574476d59c5bf317bdabca2f55"
+        },
+        {
+            "date": 1700071497066,
+            "name": "F:\\Projects\\my-projects\\rr-traders-server\\logs\\winston\\errors\\phu-2023-16-11-00-error.log",
+            "hash": "32a5befd6858fa60ea9e6bcd9d83a3f8ec29a0e98ee4aeb030279a3ba53f0c96"
+        },
+        {
+            "date": 1700075916966,
+            "name": "F:\\Projects\\my-projects\\rr-traders-server\\logs\\winston\\errors\\phu-2023-16-11-01-error.log",
+            "hash": "30540daeca0590a378f66cc22c7cdfdf38aa99e755ec37d6a0a93a830ceb8632"
         }
     ],
     "hashType": "sha256"
