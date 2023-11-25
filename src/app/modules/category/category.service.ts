@@ -1,10 +1,10 @@
-import { PrismaClient } from '@prisma/client';
+import { Category, PrismaClient } from '@prisma/client';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError';
 
 const prisma = new PrismaClient();
 
-const createCategory = async (categoryData: any) => {
+const createCategory = async (categoryData: Category) => {
   try {
     const result = await prisma.category.create({
       data: categoryData,
@@ -40,7 +40,10 @@ const getCategoryById = async (categoryId: number) => {
   }
 };
 
-const updateCategory = async (categoryId: number, categoryData: any) => {
+const updateCategory = async (
+  categoryId: number,
+  categoryData: Partial<Category>
+) => {
   try {
     const updatedCategory = await prisma.category.update({
       where: {
