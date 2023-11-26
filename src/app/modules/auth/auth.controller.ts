@@ -5,7 +5,13 @@ import sendResponse from '../../../shared/sendResponse';
 import { UserService } from './auth.service';
 
 const getAllUsers = catchAsync(async (req: Request, res: Response) => {
-  res.send('user retrieved');
+  const result = await UserService.getAllUsers();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User retrieved successfully',
+    data: result,
+  });
 });
 
 const registerUser = catchAsync(async (req: Request, res: Response) => {

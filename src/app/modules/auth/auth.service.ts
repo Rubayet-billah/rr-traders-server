@@ -2,6 +2,7 @@
 
 import { PrismaClient, User } from '@prisma/client';
 import httpStatus from 'http-status';
+import { ENUM_USER_ROLE } from '../../../enums/user';
 import ApiError from '../../../errors/ApiError';
 import {
   generateUserId,
@@ -11,20 +12,22 @@ import {
 
 const prisma = new PrismaClient();
 
+const getAllUsers = async () => {
+  const result = await prisma.user.findMany();
+  return result;
+};
+
 const registerUser = async (userData: User) => {
-  try {
-    const userId = await generateUserId();
-    userData.userId = userId;
+  const userId = await generateUserId();
+  userData.userId = userId;
+  userData.password = (await hashUserPassword(userData.password)) as string;
+  const role = userData?.role;
+  if (!role) userData.role = ENUM_USER_ROLE.CUSTOMER;
 
-    userData.password = (await hashUserPassword(userData.password)) as string;
-
-    const result = await prisma.user.create({
-      data: userData,
-    });
-    return result;
-  } catch (error) {
-    throw new Error('Failed to register user'); // Handle error as needed
-  }
+  const result = await prisma.user.create({
+    data: userData,
+  });
+  return result;
 };
 const loginUser = async (loginData: Partial<User>) => {
   const user = await prisma.user.findUnique({
@@ -47,6 +50,7 @@ const loginUser = async (loginData: Partial<User>) => {
 };
 
 export const UserService = {
+  getAllUsers,
   registerUser,
   loginUser,
 };
