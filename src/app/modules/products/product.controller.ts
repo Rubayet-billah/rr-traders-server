@@ -16,7 +16,12 @@ const getAllProducts = catchAsync(async (req: Request, res: Response) => {
 
 const createProduct = catchAsync(async (req: Request, res: Response) => {
   const productData = req.body;
-  const newProduct = await ProductService.createProduct(productData);
+  const refactoredProductData = {
+    ...productData,
+    categoryId: +productData.categoryId,
+    inStockQuantity: +productData.inStockQuantity,
+  };
+  const newProduct = await ProductService.createProduct(refactoredProductData);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,

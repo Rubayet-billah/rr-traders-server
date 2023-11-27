@@ -37,7 +37,7 @@ model Product {
   id              Int     @id @default(autoincrement())
   name            String  @unique
   categoryId      Int
-  price           Float
+  price           String
   inStockQuantity Int
   image           String?
   description     String
