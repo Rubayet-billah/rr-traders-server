@@ -6,12 +6,21 @@ const prisma = new PrismaClient();
 
 const createProduct = async (productData: Product) => {
   try {
+    const existedProduct = await prisma.product.findFirst({
+      where: {
+        name: productData?.name,
+      },
+    });
+    if (existedProduct) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'This product already exists');
+    }
+
     const result = await prisma.product.create({
       data: productData,
     });
     return result;
   } catch (error) {
-    throw new Error('Failed to create product'); // Handle error as needed
+    throw new Error('Failed to create product');
   }
 };
 
@@ -20,7 +29,7 @@ const getAllProducts = async () => {
     const products = await prisma.product.findMany();
     return products;
   } catch (error) {
-    throw new Error('Failed to fetch products'); // Handle error as needed
+    throw new Error('Failed to fetch products');
   }
 };
 
@@ -36,7 +45,7 @@ const getProductById = async (productId: number) => {
     }
     return product;
   } catch (error) {
-    throw new Error('Failed to fetch product by ID'); // Handle error as needed
+    throw new Error('Failed to fetch product by ID');
   }
 };
 
@@ -53,7 +62,7 @@ const updateProduct = async (
     });
     return updatedProduct;
   } catch (error) {
-    throw new Error('Failed to update product'); // Handle error as needed
+    throw new Error('Failed to update product');
   }
 };
 
@@ -66,7 +75,7 @@ const deleteProduct = async (productId: number) => {
     });
     return deletedProduct;
   } catch (error) {
-    throw new Error('Failed to delete product'); // Handle error as needed
+    throw new Error('Failed to delete product');
   }
 };
 

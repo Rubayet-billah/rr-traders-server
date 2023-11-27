@@ -35,12 +35,13 @@ model Category {
 
 model Product {
   id              Int     @id @default(autoincrement())
-  name            String
+  name            String  @unique
   categoryId      Int
   price           Float
   inStockQuantity Int
   image           String?
   description     String
+  featured        Boolean @default(false)
 
   category  Category @relation(fields: [categoryId], references: [id])
   createdAt DateTime @default(now())
