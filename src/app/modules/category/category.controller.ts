@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
+import { fileUploadHelper } from '../../../helpers/fileUploadHelper';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { CategoryService } from './category.service';
@@ -15,14 +16,19 @@ const getAllCategories = catchAsync(async (req: Request, res: Response) => {
 });
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
-  const categoryData = req.body;
-  const newCategory = await CategoryService.createCategory(categoryData);
-  sendResponse(res, {
-    statusCode: httpStatus.CREATED,
-    success: true,
-    message: 'Category created successfully',
-    data: newCategory,
-  });
+  // console.log(req.file, req.body);
+  const uploadedImage = await fileUploadHelper.uploadToCloudinary(req.file);
+  console.log(uploadedImage);
+  res.send(uploadedImage);
+
+  // const categoryData = req.body;
+  // const newCategory = await CategoryService.createCategory(categoryData);
+  // sendResponse(res, {
+  //   statusCode: httpStatus.CREATED,
+  //   success: true,
+  //   message: 'Category created successfully',
+  //   data: newCategory,
+  // });
 });
 
 const getCategoryById = catchAsync(async (req: Request, res: Response) => {
