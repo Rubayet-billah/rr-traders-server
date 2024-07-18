@@ -39,6 +39,7 @@ model Product {
   name            String  @unique
   categoryId      Int
   price           String
+  discount        String?
   inStockQuantity Int
   image           String?
   description     String
