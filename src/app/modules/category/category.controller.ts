@@ -16,19 +16,22 @@ const getAllCategories = catchAsync(async (req: Request, res: Response) => {
 });
 
 const createCategory = catchAsync(async (req: Request, res: Response) => {
-  // console.log(req.file, req.body);
   const uploadedImage = await fileUploadHelper.uploadToCloudinary(req.file);
-  console.log(uploadedImage);
-  res.send(uploadedImage);
 
-  // const categoryData = req.body;
-  // const newCategory = await CategoryService.createCategory(categoryData);
-  // sendResponse(res, {
-  //   statusCode: httpStatus.CREATED,
-  //   success: true,
-  //   message: 'Category created successfully',
-  //   data: newCategory,
-  // });
+  const categoryData = {
+    categoryName: req.body.categoryName,
+    categoryImage: uploadedImage.secure_url, // URL of the uploaded image
+    categoryDescription: req.body.categoryDescription,
+  };
+
+  const newCategory = await CategoryService.createCategory(categoryData);
+
+  sendResponse(res, {
+    statusCode: httpStatus.CREATED,
+    success: true,
+    message: 'Category created successfully',
+    data: newCategory,
+  });
 });
 
 const getCategoryById = catchAsync(async (req: Request, res: Response) => {

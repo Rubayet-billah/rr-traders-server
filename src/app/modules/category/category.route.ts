@@ -1,4 +1,5 @@
 import express from 'express';
+import { fileUploadHelper } from '../../../helpers/fileUploadHelper';
 import { CategoryController } from './category.controller';
 
 const router = express.Router();
@@ -6,12 +7,11 @@ const router = express.Router();
 router.get('/', CategoryController.getAllCategories);
 router.post(
   '/',
-  CategoryController.createCategory
-  // fileUploadHelper.upload.single('file'),
-  // (req: Request, res: Response, next: NextFunction) => {
-  //   req.body = JSON.parse(req.body.data);
-  //   return CategoryController.createCategory(req, res, next);
-  // }
+  fileUploadHelper.upload.single('file'), // Add file upload middleware
+  (req, res, next) => {
+    req.body = JSON.parse(req.body.data); // Parse the request body
+    return CategoryController.createCategory(req, res, next);
+  }
 );
 router.get('/:categoryId', CategoryController.getCategoryById);
 router.patch('/:categoryId', CategoryController.updateCategory);

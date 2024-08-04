@@ -4,7 +4,7 @@ import ApiError from '../../../errors/ApiError';
 
 const prisma = new PrismaClient();
 
-const createCategory = async (categoryData: Category) => {
+const createCategory = async (categoryData: Partial<Category>) => {
   const result = await prisma.category.create({
     data: categoryData,
   });
