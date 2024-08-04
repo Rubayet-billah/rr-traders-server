@@ -8,10 +8,7 @@ router.get('/', CategoryController.getAllCategories);
 router.post(
   '/',
   fileUploadHelper.upload.single('file'), // Add file upload middleware
-  (req, res, next) => {
-    req.body = JSON.parse(req.body.data); // Parse the request body
-    return CategoryController.createCategory(req, res, next);
-  }
+  CategoryController.createCategory
 );
 router.get('/:categoryId', CategoryController.getCategoryById);
 router.patch('/:categoryId', CategoryController.updateCategory);

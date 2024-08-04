@@ -18,10 +18,11 @@ const getAllCategories = catchAsync(async (req: Request, res: Response) => {
 const createCategory = catchAsync(async (req: Request, res: Response) => {
   const uploadedImage = await fileUploadHelper.uploadToCloudinary(req.file);
 
+  req.body = JSON.parse(req.body.data);
+
   const categoryData = {
-    categoryName: req.body.categoryName,
-    categoryImage: uploadedImage.secure_url, // URL of the uploaded image
-    categoryDescription: req.body.categoryDescription,
+    categoryImage: uploadedImage.secure_url,
+    ...req.body,
   };
 
   const newCategory = await CategoryService.createCategory(categoryData);
