@@ -11,41 +11,125 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  userId    String
-  email     String   @unique
-  password  String
-  phone     String?
-  company   String?
-  firstName String
-  lastName  String
-  role      String   @default("CUSTOMER")
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id            Int      @id @default(autoincrement())
+  userId        String   @unique
+  role          UserRole
+  name          String
+  email         String   @unique
+  password      String
+  image         String
+  totalPurchase Int
+  membership    String?
+  topRated      Boolean  @default(false)
+  isDeleted     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  payroll       Payroll?
+  reviews       Review[]
+  cart          Cart?
+  orders        Order[]
+}
+
+enum UserRole {
+  CUSTOMER
+  ADMIN
+  STAFF
 }
 
 model Category {
-  id                  Int       @id @default(autoincrement())
-  categoryName        String    @unique
-  categoryImage       String
-  categoryDescription String
-  createdAt           DateTime  @default(now())
-  updatedAt           DateTime  @updatedAt
-  products            Product[]
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String
+  image       String
+  isDeleted   Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
 }
 
 model Product {
-  id              Int     @id @default(autoincrement())
-  name            String  @unique
-  categoryId      Int
-  price           String
-  discount        String?
-  inStockQuantity Int
-  image           String?
-  description     String
-  featured        Boolean @default(false)
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  images      String[]
+  thumbnail   String
+  categoryId  Int
+  category    Category   @relation(fields: [categoryId], references: [id])
+  price       Float
+  discount    Float?
+  stock       Int
+  quantity    Int
+  totalOrder  Int
+  delivered   Int
+  rating      Float
+  featured    Boolean    @default(false)
+  isDeleted   Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  reviews     Review[]
+  orders      Order[]
+  cartItems   CartItem[]
+}
 
-  category  Category @relation(fields: [categoryId], references: [id])
+model Payroll {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
+  salary    Float
+  payment   String
+  isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Review {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id])
+  productId   Int
+  product     Product  @relation(fields: [productId], references: [id])
+  rating      Float
+  description String
+  featured    Boolean  @default(false)
+  isDeleted   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Order {
+  id              Int      @id @default(autoincrement())
+  userId          Int
+  user            User     @relation(fields: [userId], references: [id])
+  productId       Int
+  product         Product  @relation(fields: [productId], references: [id])
+  quantity        Int
+  totalPrice      Float
+  payment         String
+  paymentMethod   String
+  status          String
+  deliveryAddress String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Cart {
+  id        Int        @id @default(autoincrement())
+  userId    Int        @unique
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id         Int      @id @default(autoincrement())
+  cartId     Int
+  cart       Cart     @relation(fields: [cartId], references: [id])
+  productId  Int
+  product    Product  @relation(fields: [productId], references: [id])
+  quantity   Int
+  price      Float
+  totalPrice Float
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

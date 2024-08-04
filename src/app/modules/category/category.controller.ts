@@ -21,7 +21,7 @@ const createCategory = catchAsync(async (req: Request, res: Response) => {
   req.body = JSON.parse(req.body.data);
 
   const categoryData = {
-    categoryImage: uploadedImage.secure_url,
+    image: uploadedImage.secure_url,
     ...req.body,
   };
 
