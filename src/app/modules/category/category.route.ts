@@ -11,7 +11,11 @@ router.post(
   CategoryController.createCategory
 );
 router.get('/:categoryId', CategoryController.getCategoryById);
-router.patch('/:categoryId', CategoryController.updateCategory);
+router.patch(
+  '/:categoryId',
+  fileUploadHelper.upload.single('file'),
+  CategoryController.updateCategory
+);
 router.delete('/:categoryId', CategoryController.deleteCategory);
 
 export const CategoryRoutes = router;

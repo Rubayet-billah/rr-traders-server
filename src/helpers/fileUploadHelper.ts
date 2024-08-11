@@ -20,6 +20,10 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 const uploadToCloudinary = async (file: any) => {
+  if (typeof file === 'string') {
+    return null; // Return null if no file was uploaded
+  }
+
   return new Promise((resolve, reject) => {
     cloudinary.uploader.upload(file.path, (error: any, result: any) => {
       if (error) {

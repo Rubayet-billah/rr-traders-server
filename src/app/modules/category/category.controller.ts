@@ -62,7 +62,24 @@ const getCategoryById = catchAsync(async (req: Request, res: Response) => {
 
 const updateCategory = catchAsync(async (req: Request, res: Response) => {
   const { categoryId } = req.params;
-  const categoryData = req.body;
+  const { image } = req.body;
+
+  let imageUrl;
+  if (req.file) {
+    // If a new image file is uploaded, upload it to Cloudinary
+    const uploadedImage = await fileUploadHelper.uploadToCloudinary(req.file);
+    imageUrl = uploadedImage?.secure_url;
+  } else if (typeof image === 'string') {
+    // Use the existing image URL if no new file is uploaded
+    imageUrl = req.body.data.image;
+  }
+
+  req.body = JSON.parse(req.body.data);
+
+  const categoryData = {
+    image: imageUrl,
+    ...req.body,
+  };
   const updatedCategory = await CategoryService.updateCategory(
     parseInt(categoryId, 10),
     categoryData
