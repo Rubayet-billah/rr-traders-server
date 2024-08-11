@@ -17,12 +17,14 @@ const getAllUsers = async () => {
   return result;
 };
 
-const registerUser = async (userData: User) => {
+const registerUser = async (userData: Partial<User>) => {
   const userId = await generateUserId();
   userData.userId = userId;
-  userData.password = (await hashUserPassword(userData.password)) as string;
+  userData.password = (await hashUserPassword(userData?.password)) as string;
   const role = userData?.role;
   if (!role) userData.role = ENUM_USER_ROLE.CUSTOMER;
+  const totalPurchase = userData?.totalPurchase;
+  if (!totalPurchase) userData.totalPurchase = 0;
 
   const result = await prisma.user.create({
     data: userData,

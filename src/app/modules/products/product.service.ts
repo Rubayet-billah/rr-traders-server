@@ -4,7 +4,7 @@ import ApiError from '../../../errors/ApiError';
 
 const prisma = new PrismaClient();
 
-const createProduct = async (productData: Product) => {
+const createProduct = async (productData: Partial<Product>) => {
   const existedProduct = await prisma.product.findFirst({
     where: {
       name: productData?.name,
@@ -13,6 +13,9 @@ const createProduct = async (productData: Product) => {
   if (existedProduct) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'This product already exists');
   }
+
+  const stock = productData?.stock;
+  if (!stock) productData.stock = true;
 
   const result = await prisma.product.create({
     data: productData,

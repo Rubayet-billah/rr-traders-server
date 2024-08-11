@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
+import { fileUploadHelper } from '../../../helpers/fileUploadHelper';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { UserService } from './auth.service';
@@ -15,7 +16,18 @@ const getAllUsers = catchAsync(async (req: Request, res: Response) => {
 });
 
 const registerUser = catchAsync(async (req: Request, res: Response) => {
-  const userData = req.body;
+  const uploadedImage = (await fileUploadHelper.uploadToCloudinary(
+    req.file
+  )) as {
+    secure_url: string;
+  };
+
+  req.body = JSON.parse(req.body.data);
+
+  const userData = {
+    image: uploadedImage.secure_url,
+    ...req.body,
+  };
   const result = await UserService.registerUser(userData);
   sendResponse(res, {
     statusCode: httpStatus.OK,

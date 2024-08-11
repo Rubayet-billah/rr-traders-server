@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
+import { fileUploadHelper } from '../../../helpers/fileUploadHelper';
 import catchAsync from '../../../shared/catchAsync';
 import sendResponse from '../../../shared/sendResponse';
 import { ProductService } from './product.service';
@@ -15,13 +16,24 @@ const getAllProducts = catchAsync(async (req: Request, res: Response) => {
 });
 
 const createProduct = catchAsync(async (req: Request, res: Response) => {
-  const productData = req.body;
-  const refactoredProductData = {
-    ...productData,
-    categoryId: +productData.categoryId,
-    inStockQuantity: +productData.inStockQuantity,
+  const uploadedImage = (await fileUploadHelper.uploadToCloudinary(
+    req.file
+  )) as {
+    secure_url: string;
   };
-  const newProduct = await ProductService.createProduct(refactoredProductData);
+
+  req.body = JSON.parse(req.body.data);
+
+  const productData = {
+    thumbnail: uploadedImage.secure_url,
+    ...req.body,
+  };
+  // const refactoredProductData = {
+  //   ...productData,
+  //   categoryId: +productData.categoryId,
+  //   inStockQuantity: +productData.inStockQuantity,
+  // };
+  const newProduct = await ProductService.createProduct(productData);
   sendResponse(res, {
     statusCode: httpStatus.CREATED,
     success: true,
