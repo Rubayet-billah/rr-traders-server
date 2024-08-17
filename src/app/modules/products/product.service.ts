@@ -14,8 +14,12 @@ const createProduct = async (productData: Partial<Product>) => {
     throw new ApiError(httpStatus.BAD_REQUEST, 'This product already exists');
   }
 
+  productData.categoryId = +productData?.categoryId;
+  productData.price = +productData?.price;
   const stock = productData?.stock;
   if (!stock) productData.stock = true;
+
+  console.log('hi product', productData);
 
   const result = await prisma.product.create({
     data: productData,
