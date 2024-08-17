@@ -50,9 +50,23 @@ const loginUser = async (loginData: Partial<User>) => {
   }
   return user;
 };
+const getUsersByRole = async (params: any) => {
+  const users = await prisma.user.findMany({
+    where: {
+      role: params.role.toUpperCase(),
+    },
+  });
+
+  if (users.length === 0) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'No users found with this role');
+  }
+
+  return users;
+};
 
 export const UserService = {
   getAllUsers,
   registerUser,
   loginUser,
+  getUsersByRole,
 };

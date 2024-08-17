@@ -4,6 +4,7 @@ import { UserController } from './auth.controller';
 const router = express.Router();
 
 router.get('/users', UserController.getAllUsers);
+router.get('/users/:role', UserController.getUsersByRole);
 router.post(
   '/register',
   fileUploadHelper.upload.single('file'),

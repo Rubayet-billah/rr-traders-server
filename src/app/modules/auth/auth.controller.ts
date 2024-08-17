@@ -48,8 +48,20 @@ const loginUser = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const getUsersByRole = catchAsync(async (req: Request, res: Response) => {
+  const params = req.params;
+  const result = await UserService.getUsersByRole(params);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User retrieved in successfully',
+    data: result,
+  });
+});
+
 export const UserController = {
   getAllUsers,
   registerUser,
   loginUser,
+  getUsersByRole,
 };
