@@ -63,11 +63,34 @@ const getProductById = catchAsync(async (req: Request, res: Response) => {
 
 const updateProduct = catchAsync(async (req: Request, res: Response) => {
   const { productId } = req.params;
-  const productData = req.body;
+  const { thumbnail } = req.body;
+
+  let thumbnailUrl;
+  if (req.file) {
+    // If a new thumbnail file is uploaded, upload it to Cloudinary
+    const uploadedThumbnail = (await fileUploadHelper.uploadToCloudinary(
+      req.file
+    )) as {
+      secure_url: string;
+    };
+    thumbnailUrl = uploadedThumbnail?.secure_url;
+  } else if (typeof thumbnail === 'string') {
+    // Use the existing thumbnail URL if no new file is uploaded
+    thumbnailUrl = req.body.data.thumbnail;
+  }
+
+  req.body = JSON.parse(req.body.data);
+
+  const productData = {
+    thumbnail: thumbnailUrl,
+    ...req.body,
+  };
+
   const updatedProduct = await ProductService.updateProduct(
     parseInt(productId, 10),
     productData
   );
+
   sendResponse(res, {
     statusCode: httpStatus.OK,
     success: true,

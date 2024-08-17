@@ -5,25 +5,66 @@ import ApiError from '../../../errors/ApiError';
 const prisma = new PrismaClient();
 
 const createProduct = async (productData: Partial<Product>) => {
+  // Check if the product already exists
   const existedProduct = await prisma.product.findFirst({
     where: {
-      name: productData?.name,
+      name: productData.name,
     },
   });
   if (existedProduct) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'This product already exists');
   }
 
-  productData.categoryId = +productData?.categoryId;
-  productData.price = +productData?.price;
-  const stock = productData?.stock;
-  if (!stock) productData.stock = true;
+  // Convert types and set default values
+  if (productData.categoryId !== undefined) {
+    productData.categoryId = +productData.categoryId;
+  }
 
-  console.log('hi product', productData);
+  if (productData.price !== undefined) {
+    productData.price = parseFloat(productData.price as unknown as string);
+  }
 
+  if (productData.discount !== undefined) {
+    productData.discount = parseFloat(
+      productData.discount as unknown as string
+    );
+  }
+
+  if (productData.quantity !== undefined) {
+    productData.quantity = parseInt(
+      productData.quantity as unknown as string,
+      10
+    );
+  }
+
+  if (productData.totalOrder !== undefined) {
+    productData.totalOrder = parseInt(
+      productData.totalOrder as unknown as string,
+      10
+    );
+  }
+
+  if (productData.delivered !== undefined) {
+    productData.delivered = parseInt(
+      productData.delivered as unknown as string,
+      10
+    );
+  }
+
+  if (productData.rating !== undefined) {
+    productData.rating = parseFloat(productData.rating as unknown as string);
+  }
+
+  // Set default values if not provided
+  if (productData.stock === undefined) {
+    productData.stock = true;
+  }
+
+  // Create the product
   const result = await prisma.product.create({
     data: productData,
   });
+
   return result;
 };
 
@@ -56,6 +97,46 @@ const updateProduct = async (
   productId: number,
   productData: Partial<Product>
 ) => {
+  // Convert fields to the correct types
+  if (productData?.categoryId !== undefined) {
+    productData.categoryId = +productData.categoryId;
+  }
+
+  if (productData?.price !== undefined) {
+    productData.price = parseFloat(productData.price as unknown as string);
+  }
+
+  if (productData?.discount !== undefined) {
+    productData.discount = parseFloat(
+      productData.discount as unknown as string
+    );
+  }
+
+  if (productData?.quantity !== undefined) {
+    productData.quantity = parseInt(
+      productData.quantity as unknown as string,
+      10
+    );
+  }
+
+  if (productData?.totalOrder !== undefined) {
+    productData.totalOrder = parseInt(
+      productData.totalOrder as unknown as string,
+      10
+    );
+  }
+
+  if (productData?.delivered !== undefined) {
+    productData.delivered = parseInt(
+      productData.delivered as unknown as string,
+      10
+    );
+  }
+
+  if (productData?.rating !== undefined) {
+    productData.rating = parseFloat(productData.rating as unknown as string);
+  }
+
   try {
     const updatedProduct = await prisma.product.update({
       where: {

@@ -11,7 +11,11 @@ router.post(
   ProductController.createProduct
 );
 router.get('/:productId', ProductController.getProductById);
-router.patch('/:productId', ProductController.updateProduct);
+router.patch(
+  '/:productId',
+  fileUploadHelper.upload.single('file'),
+  ProductController.updateProduct
+);
 router.delete('/:productId', ProductController.deleteProduct);
 
 export const ProductRoutes = router;
