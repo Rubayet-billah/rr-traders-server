@@ -83,6 +83,9 @@ const getProductById = async (productId: number) => {
       where: {
         id: productId,
       },
+      include: {
+        category: true,
+      },
     });
     if (!product) {
       throw new ApiError(httpStatus.NOT_FOUND, 'Product not found');

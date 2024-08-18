@@ -59,9 +59,51 @@ const getUsersByRole = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateUser = catchAsync(async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  const { image } = req.body;
+
+  let imageUrl;
+  if (req.file) {
+    const uploadedImage = (await fileUploadHelper.uploadToCloudinary(
+      req.file
+    )) as { secure_url: string };
+    imageUrl = uploadedImage?.secure_url;
+  } else if (typeof image === 'string') {
+    imageUrl = req.body.data.image;
+  }
+
+  req.body = JSON.parse(req.body.data);
+
+  const userData = {
+    image: imageUrl,
+    ...req.body,
+  };
+
+  const result = await UserService.updateUser(parseInt(userId, 10), userData);
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'User updated successfully',
+    data: result,
+  });
+});
+
+const deleteUser = catchAsync(async (req: Request, res: Response) => {
+  const { userId } = req.params;
+  await UserService.deleteUser(parseInt(userId, 10));
+  sendResponse(res, {
+    statusCode: httpStatus.NO_CONTENT,
+    success: true,
+    message: 'User deleted successfully',
+  });
+});
+
 export const UserController = {
   getAllUsers,
   registerUser,
   loginUser,
   getUsersByRole,
+  updateUser,
+  deleteUser,
 };

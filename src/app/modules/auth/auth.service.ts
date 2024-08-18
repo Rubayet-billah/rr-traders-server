@@ -20,7 +20,9 @@ const getAllUsers = async () => {
 const registerUser = async (userData: Partial<User>) => {
   const userId = await generateUserId();
   userData.userId = userId;
-  userData.password = (await hashUserPassword(userData?.password)) as string;
+  userData.password = (await hashUserPassword(
+    userData?.password as string
+  )) as string;
   const role = userData?.role;
   if (!role) userData.role = ENUM_USER_ROLE.CUSTOMER;
   const totalPurchase = userData?.totalPurchase;
@@ -64,9 +66,32 @@ const getUsersByRole = async (params: any) => {
   return users;
 };
 
+const updateUser = async (userId: number, userData: Partial<User>) => {
+  return await prisma.user.update({
+    where: { id: userId },
+    data: userData,
+  });
+};
+
+const deleteUser = async (userId: number) => {
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+  });
+
+  if (!user) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'User not found');
+  }
+
+  return await prisma.user.delete({
+    where: { id: userId },
+  });
+};
+
 export const UserService = {
   getAllUsers,
   registerUser,
   loginUser,
   getUsersByRole,
+  updateUser,
+  deleteUser,
 };

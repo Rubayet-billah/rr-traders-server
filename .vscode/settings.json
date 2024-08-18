@@ -4,5 +4,5 @@
     "source.fixAll.tslint": "explicit",
     "source.organizeImports": "explicit"
   },
-  "workbench.colorTheme": "GitHub Dark"
+  "workbench.colorTheme": "Dracula Theme Soft"
 }
